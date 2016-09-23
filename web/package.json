@@ -1,0 +1,30 @@
+{
+  "name": "friggr-web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "pretest": "standard",
+    "test": "jasmine"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/unlessquit/friggr.git"
+  },
+  "author": "unlessquit",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/unlessquit/friggr/issues"
+  },
+  "homepage": "https://github.com/unlessquit/friggr",
+  "dependencies": {
+    "express": "^4.14.0"
+  },
+  "devDependencies": {
+    "jasmine": "^2.5.2",
+    "standard": "^8.1.0",
+    "supertest": "^2.0.0",
+    "supertest-as-promised": "^4.0.0"
+  }
+}
