@@ -1,5 +1,5 @@
 start:
-	cd web && npm start
+	$(MAKE) -C web start
 
 test:
-	cd web && npm test
+	$(MAKE) -C web test
