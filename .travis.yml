@@ -1,5 +1,24 @@
 language: node_js
 node_js:
   - "6"
+
+## test
 script:
   - make test
+
+## deploy
+sudo: required
+services:
+  - docker
+deploy:
+  provider: script
+  skip_cleanup: true # use exactly same stuff for deploy as for test
+  script: docker login -u $DOCKER_USER -p $DOCKER_PASS && make release
+  on:
+    branch: master
+
+## env
+env:
+  global:
+    - secure: SNKz1AmVkTgMR/tUj152v/g8p1fdLv4yBCHvM5oy4XgQ7+RSoEyPsbuzMzIKiYMN7S3WVPYJaoZ+8DPC9RZ8n8RgBUfw40n06zQeaV5qlEDKLHkbuyKbbHoXf/CwamrJMc/KMjIu8bloYQrTrqubeDmRvE03bzmS7f42YAnJ3pdxX3fhMTbRpuQAWEeBh8sKqeyB92hEq2GfTcIW01WPzjchQVKJu7GGTCxNFYyYpzrkGiVeh3NYRfcXC4jPhfriV0r+FzKIpudyA5HYw620ploR+Cnwimxf5cev5rke8yxUdrVxZMU+FKj9ZaWTTr1eHTpmMhFQpjMYfkVxoVk7aOA6cvMjgosrQOkD86THVDiY5v4BaZon0EaLu57mQeaUL9c/0Lk4b+zkZsazegxz1RzX7uSux2bzecaLMx+Hd+hrGZ75ge04ZLbtrN3IVikH8vDp7yQfyuBdvqegbGciYhP7YQl03iBl+AmDehvGsa8LbzCFyHSAwYqhEZKn0+bWBWETB5eu06XneVNPI1jNyA8kR2pMZkmGIICPx39TbLMdl2FETFbNerNVAMpaPARkYnbOvrQDMt+utG9M7OFi1a6XdBORyK/vKFrktRJVRxNmqEyqG6hLhWJvimUaTV0A533YmfZPi5LKriMEMcxFxeWylRbi7VHATi4j/duv8r0=
+    - secure: w6ea5eX0CMaESSvE40JRPNr9CML9Mbrky52ATy78PaopF/z/zbqNOgQFMR904eFPd2zfrqyASSrn8a+EFmfydLd1mHSzpp5BZtNLkK27xM5qWn26afztXiT4rxZsnoZlHuTU0RCpkodXO8khGiR31zL1J5OvH3rO1gxtxA7PbSj7c1YwUKoaVfzo6Owz4GZXivAVxfui31dGEp9rRVA6VMsjw2vpUjuykUhbWaRu7Zg5ugpKz1ikLRoRKJgoZbjRh3NkePXYje1WZ+6wWstvfLgPV4Lu0HekUz71VnR9XNxjzh2bAMG71u/lpwlQu/HxozDG9u5TApinPpzIWki14891h8dtj0uTOCOtZ2gxgS2jGIEWF37iXF8P4bf5a2fwd5FWCOIzENkKI5Krvu91wbVpOo4T2nWId+aL80nsnpL1ibzb1e8VbCLWShDV0QvN+WOQxe7q+AElDpnJ+FKPOwCTw4lgRpanr4W4olP0bueoDZcBzAblB/Bo0Ip1Oix1jDkVJWXtPZRRbESN5QccnPen2syrKA0/E7ftvoGBH3wGaSmXvsoV6i8XsIdzi65qPJ8u3wAMIjhS83smjSud0JsrCUSmGqynIo8jaRSaUL4pMjtoH4nj1yebZNVbZQvzax7dgfsD3HGyhG3B5M/4Kea9IBNXumYwrlJ0cYtrfug=
