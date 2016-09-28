@@ -3,6 +3,24 @@ services:
   web:
     build: web
     ports:
-     - "3000:3000"
+      - "3000:3000"
     volumes:
-     - ./web:/app
+      - ./web:/app
+    environment:
+      - PGHOST=postgres
+    command: "make start"
+
+  data:
+    restart: always
+    image: postgres:latest
+    volumes:
+      - /var/lib/postgresql
+    command: "true"
+
+  postgres:
+    restart: always
+    image: postgres:latest
+    volumes_from:
+      - data
+    ports:
+      - "5432:5432"
