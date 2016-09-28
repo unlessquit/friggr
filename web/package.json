@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "nodemon index.js",
     "pretest": "standard",
     "test": "jasmine"
   },
@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "jasmine": "^2.5.2",
+    "nodemon": "^1.10.2",
     "standard": "^8.1.0",
     "supertest": "^2.0.0",
     "supertest-as-promised": "^4.0.0"
