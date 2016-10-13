@@ -12,4 +12,6 @@ router.get('/', function (req, res) {
     })
 })
 
+router.use('/view', express.static('/data'))
+
 module.exports = router

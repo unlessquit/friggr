@@ -4,13 +4,22 @@ services:
     build: web
     ports:
       - "3000:3000"
+    volumes_from:
+      - web-data
     volumes:
       - ./web:/app
     environment:
       - PGHOST=postgres
     command: "make start"
 
-  data:
+  web-data:
+    restart: always
+    build: web
+    volumes:
+      - /data
+    command: "true"
+
+  postgres-data:
     restart: always
     image: postgres:latest
     volumes:
@@ -21,6 +30,6 @@ services:
     restart: always
     image: postgres:latest
     volumes_from:
-      - data
+      - postgres-data
     ports:
       - "5432:5432"
