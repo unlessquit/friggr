@@ -12,6 +12,10 @@ router.get('/', function (req, res) {
     })
 })
 
+router.post('/inbox', function (req, res) {
+  res.send('Whatever')
+})
+
 router.use('/view', express.static('/data'))
 
 module.exports = router
