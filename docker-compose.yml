@@ -12,7 +12,7 @@ services:
       - ./web:/app
     environment:
       - PGHOST=database
-    command: "make start"
+    command: "make delayed-start"
 
   web-data:
     restart: always

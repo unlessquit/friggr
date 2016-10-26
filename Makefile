@@ -1,6 +1,9 @@
 start:
 	docker-compose up
 
+stop:
+	docker-compose stop
+
 connect-db:
 	#
 	# Requires app to be started.

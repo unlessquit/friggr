@@ -9,3 +9,7 @@ var db = {
 }
 
 exports.db = db
+
+exports.DATABASE_URL = 'postgres://' +
+  db.user + (db.password ? (':' + db.password) : '') +
+  '@' + db.host + ':' + db.port + '/' + db.database
