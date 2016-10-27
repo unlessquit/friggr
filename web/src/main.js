@@ -69,7 +69,7 @@ router.get('/view/:userId/latest.jpg', function (req, res) {
   })
 })
 
-router.use('/view', express.static('/data'))
+router.use('/view', express.static('/data', {maxAge: '1year'}))
 
 function storagePath (userId, photoId) {
   return '/data/' + userId + '/' + photoId + '.jpg'
