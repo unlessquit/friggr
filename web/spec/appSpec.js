@@ -1,17 +1,18 @@
 /* global spyOn, describe, it, beforeEach, fail */
 var request = require('supertest-as-promised')
 var app = require('../src/app')
-var db = require('../src/db')
+var DbStub = require('../src/db/stub')
 var path = require('path')
 
 var agent
+var db
 var file = function (name) {
   return path.join(__dirname, 'data', name)
 }
 
 describe('app', function () {
   beforeEach(function () {
-    agent = request.agent(app)
+    agent = request.agent(app.build(db = new DbStub()))
   })
 
   it('works', function (done) {
@@ -40,24 +41,25 @@ describe('app', function () {
 
   describe('/view/:userId/latest.jpg', function () {
     it('redirects to latest photo', function (done) {
+      var userId = 'some-user-id'
+      var previousPhotoId = 'previous-id'
       var latestPhotoId = 'latest-id'
-      spyOn(db, 'getLatestPhoto').and.returnValue(
-        Promise.resolve({id: latestPhotoId}))
+
+      db.insertPhoto(previousPhotoId, userId)
+      db.insertPhoto(latestPhotoId, userId)
 
       agent
-        .get('/view/test/latest.jpg')
+        .get('/view/' + userId + '/latest.jpg')
         .expect(302)
-        .expect('Found. Redirecting to /view/test/' + latestPhotoId + '.jpg')
+        .expect('Found. Redirecting to /view/' + userId +
+                '/' + latestPhotoId + '.jpg')
         .catch(fail)
         .then(done)
     })
 
     it('returns 404 if user does not exist', function (done) {
-      spyOn(db, 'getLatestPhoto').and.returnValue(
-        Promise.resolve(null))
-
       agent
-        .get('/view/test/latest.jpg')
+        .get('/view/unknown/latest.jpg')
         .expect(404)
         .catch(fail)
         .then(done)

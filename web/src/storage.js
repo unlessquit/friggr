@@ -1,6 +1,5 @@
 var mv = require('mv')
 var uuid = require('uuid')
-var db = require('./db')
 var errors = require('./errors')
 
 class PhotoInfo {
@@ -11,12 +10,16 @@ class PhotoInfo {
 }
 
 class Storage {
+  constructor (db) {
+    this.db = db
+  }
+
   get filesRoot () {
     return '/data'
   }
 
   getLatestPhoto (userId) {
-    return db.getLatestPhoto(userId)
+    return this.db.getLatestPhoto(userId)
       .then((photoRow) => {
         if (!photoRow) {
           throw new errors.NotFoundError()
@@ -45,7 +48,7 @@ class Storage {
             return
           }
 
-          db.insertPhoto(photoId, userId)
+          this.db.insertPhoto(photoId, userId)
             .then(_ => resolve(new PhotoInfo(photoId, userId)))
             .catch(error => reject(new Error(error)))
         })

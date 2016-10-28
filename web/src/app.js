@@ -1,8 +1,10 @@
 var express = require('express')
-var app = express()
+var realDb = require('./db')
 var Storage = require('./storage').Storage
-var mainRoutes = require('./main').build(new Storage())
 
-app.use('/', mainRoutes)
-
-module.exports = app
+exports.build = function (db) {
+  var app = express()
+  var mainRoutes = require('./main').build(new Storage(db || realDb))
+  app.use('/', mainRoutes)
+  return app
+}
