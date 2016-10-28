@@ -12,10 +12,6 @@ class PhotoInfo {
 
 exports.filesRoot = '/data'
 
-function storagePath (userId, photoId) {
-  return exports.filesRoot + '/' + userId + '/' + photoId + '.jpg'
-}
-
 exports.getLatestPhoto = function (userId) {
   return db.getLatestPhoto(userId)
     .then((photoRow) => {
@@ -36,9 +32,11 @@ exports.addPhotoFile = function (userId, photoPath) {
     ))
   }
 
+  var storedPath = exports.filesRoot + '/' + userId + '/' + photoId + '.jpg'
+
   return new Promise(
     function (resolve, reject) {
-      mv(photoPath, storagePath(userId, photoId), {mkdirp: true}, (error) => {
+      mv(photoPath, storedPath, {mkdirp: true}, (error) => {
         if (error) {
           reject(new Error(error))
           return
