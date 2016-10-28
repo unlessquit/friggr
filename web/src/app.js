@@ -1,7 +1,7 @@
 var express = require('express')
 var app = express()
-var storage = require('./storage')
-var mainRoutes = require('./main').build(storage)
+var Storage = require('./storage').Storage
+var mainRoutes = require('./main').build(new Storage())
 
 app.use('/', mainRoutes)
 
