@@ -1,9 +1,7 @@
 var mv = require('mv')
 var uuid = require('uuid')
 var db = require('./db')
-
-class NotFoundError extends Error {}
-class AccessDeniedError extends Error {}
+var errors = require('./errors')
 
 class PhotoInfo {
   constructor (id, userId) {
@@ -22,7 +20,7 @@ exports.getLatestPhoto = function (userId) {
   return db.getLatestPhoto(userId)
     .then((photoRow) => {
       if (!photoRow) {
-        throw new NotFoundError()
+        throw new errors.NotFoundError()
       }
 
       return new PhotoInfo(photoRow.id, userId)
@@ -33,7 +31,7 @@ exports.addPhotoFile = function (userId, photoPath) {
   var photoId = uuid.v4()
 
   if (userId !== 'test') {
-    return Promise.reject(new AccessDeniedError(
+    return Promise.reject(new errors.AccessDeniedError(
       'Only "test" user is allowed to upload photos'
     ))
   }
@@ -54,6 +52,4 @@ exports.addPhotoFile = function (userId, photoPath) {
   )
 }
 
-exports.AccessDeniedError = AccessDeniedError
-exports.NotFoundError = NotFoundError
 exports.PhotoInfo = PhotoInfo

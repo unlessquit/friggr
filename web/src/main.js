@@ -1,6 +1,7 @@
 var express = require('express')
 var multer = require('multer')
 var db = require('./db')
+var errors = require('./errors')
 
 var upload = multer({ dest: '/tmp/' })
 
@@ -22,7 +23,7 @@ exports.build = function (storage) {
     storage.addPhotoFile(userId, req.file.path)
       .then(photoInfo => res.redirect(viewPhotoPath(photoInfo)))
       .catch(error => {
-        if (error instanceof storage.AccessDeniedError) {
+        if (error instanceof errors.AccessDeniedError) {
           res.status(403).send('Forbidden')
         } else {
           throw error
@@ -37,7 +38,7 @@ exports.build = function (storage) {
     storage.getLatestPhoto(userId)
       .then(photoInfo => res.redirect(viewPhotoPath(photoInfo)))
       .catch(error => {
-        if (error instanceof storage.NotFoundError) {
+        if (error instanceof errors.NotFoundError) {
           res.status(404).send('Not Found')
         } else {
           throw error
