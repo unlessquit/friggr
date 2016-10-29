@@ -20,7 +20,7 @@ class Storage {
 
   getLatestPhoto (userId) {
     return this.db.getLatestPhoto(userId)
-      .then((photoRow) => {
+      .then(photoRow => {
         if (!photoRow) {
           throw new errors.NotFoundError()
         }
@@ -42,12 +42,6 @@ class Storage {
 
   addPhotoFile (userId, photoPath) {
     var photoId = uuid.v4()
-
-    if (userId !== 'test') {
-      return Promise.reject(new errors.AccessDeniedError(
-        'Only "test" user is allowed to upload photos'
-      ))
-    }
 
     var storedPath = this.filesRoot + '/' + userId + '/' + photoId + '.jpg'
 
