@@ -24,7 +24,8 @@
     "mv": "^2.1.1",
     "node-pg-migrate": "0.0.10",
     "pg": "^6.1.0",
-    "uuid": "^2.0.3"
+    "uuid": "^2.0.3",
+    "validator": "^6.1.0"
   },
   "devDependencies": {
     "jasmine": "^2.5.2",

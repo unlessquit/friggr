@@ -2,8 +2,13 @@ var express = require('express')
 var multer = require('multer')
 var db = require('./db')
 var errors = require('./errors')
+var validator = require('validator')
 
-var upload = multer({ dest: '/tmp/' })
+function jpegOnly (req, file, cb) {
+  cb(null, file.mimetype === 'image/jpeg')
+}
+
+var upload = multer({ dest: '/tmp/', fileFilter: jpegOnly })
 
 exports.build = function (storage) {
   var router = express.Router()
@@ -19,6 +24,16 @@ exports.build = function (storage) {
 
   router.post('/inbox', upload.single('photoFile'), function (req, res) {
     var userId = req.body.userId
+
+    if (!(userId && validator.isAlphanumeric(userId))) {
+      inputError(res, 'Invalid userId')
+      return
+    }
+
+    if (!req.file) {
+      inputError(res, 'Invalid photoFile')
+      return
+    }
 
     storage.addPhotoFile(userId, req.file.path)
       .then(photoInfo => res.redirect(viewPhotoPath(photoInfo)))
@@ -61,4 +76,8 @@ function internalErrorHandler (res) {
     console.error(error)
     res.status(500).send('Internal Error')
   }
+}
+
+function inputError (res, message) {
+  return res.status(400).send(message)
 }

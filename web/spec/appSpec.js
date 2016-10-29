@@ -28,12 +28,43 @@ describe('app', function () {
   })
 
   describe('/inbox', function () {
+    it('rejects request with missing userId', function (done) {
+      agent
+        .post('/inbox')
+        .attach('photoFile', file('200x200.jpg'))
+        .expect(400)
+        .expect('Invalid userId')
+        .catch(fail)
+        .then(done)
+    })
+
+    it('rejects request with missing photoFile', function (done) {
+      agent
+        .post('/inbox')
+        .field('userId', 'test')
+        .expect(400)
+        .expect('Invalid photoFile')
+        .catch(fail)
+        .then(done)
+    })
+
     it('rejects non-test users', function (done) {
       agent
         .post('/inbox')
-        .field('userId', 'any-non-test')
+        .field('userId', 'NonTestUser')
         .attach('photoFile', file('200x200.jpg'))
         .expect(403)
+        .catch(fail)
+        .then(done)
+    })
+
+    it('rejects non-jpeg files', function (done) {
+      agent
+        .post('/inbox')
+        .field('userId', 'test')
+        .attach('photoFile', file('file.txt'))
+        .expect(400)
+        .expect('Invalid photoFile')
         .catch(fail)
         .then(done)
     })
