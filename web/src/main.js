@@ -2,7 +2,7 @@ var express = require('express')
 var multer = require('multer')
 var db = require('./db')
 var errors = require('./errors')
-var validator = require('validator')
+var validate = require('./validate')
 
 function jpegOnly (req, file, cb) {
   cb(null, file.mimetype === 'image/jpeg')
@@ -25,7 +25,7 @@ exports.build = function (storage) {
   router.post('/inbox', upload.single('photoFile'), function (req, res) {
     var userId = req.body.userId
 
-    if (!(userId && validator.isAlphanumeric(userId))) {
+    if (!validate.userId(userId)) {
       inputError(res, 'Invalid userId')
       return
     }
