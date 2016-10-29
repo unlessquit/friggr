@@ -29,6 +29,17 @@ class Storage {
       })
   }
 
+  getPhoto (userId, photoId) {
+    return this.db.getPhoto(userId, photoId)
+      .then(photoRow => {
+        if (!photoRow) {
+          throw new errors.NotFoundError()
+        }
+
+        return new PhotoInfo(photoRow.id, photoRow.user_id)
+      })
+  }
+
   addPhotoFile (userId, photoPath) {
     var photoId = uuid.v4()
 
@@ -54,6 +65,10 @@ class Storage {
         })
       }
     )
+  }
+
+  photoOriginalPath (photoInfo) {
+    return this.filesRoot + '/' + photoInfo.userId + '/' + photoInfo.id + '.jpg'
   }
 }
 

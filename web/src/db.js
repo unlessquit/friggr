@@ -8,15 +8,18 @@ exports.query = function (query, args) {
   return pool.query(query, args)
 }
 
+exports.getPhoto = function (userId, photoId) {
+  return pool.query(
+    'SELECT id, user_id FROM uphoto WHERE user_id = $1 AND id = $2',
+    [userId, photoId]
+  ).then(result => result.rows[0])
+}
+
 exports.getLatestPhoto = function (userId) {
   return pool.query(
     'SELECT id FROM uphoto WHERE user_id = $1 ORDER BY ts DESC LIMIT 1',
     [userId]
-  ).then((result) => {
-    return result.rows.length === 0
-      ? null
-      : result.rows[0]
-  })
+  ).then(result => result.rows[0])
 }
 
 exports.insertPhoto = function (photoId, userId) {

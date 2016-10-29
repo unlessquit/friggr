@@ -1,14 +1,18 @@
+var path = require('path')
 var express = require('express')
 var multer = require('multer')
 var db = require('./db')
 var errors = require('./errors')
 var validate = require('./validate')
+var gm = require('gm').subClass({imageMagick: true})
 
 function jpegOnly (req, file, cb) {
   cb(null, file.mimetype === 'image/jpeg')
 }
 
-var upload = multer({ dest: '/tmp/', fileFilter: jpegOnly })
+var tmpdir = '/tmp'
+var upload = multer({dest: tmpdir, fileFilter: jpegOnly})
+var photoMaxAge = '1year'
 
 exports.build = function (storage) {
   var router = express.Router()
@@ -62,13 +66,57 @@ exports.build = function (storage) {
       .catch(internalErrorHandler(res))
   })
 
-  router.use('/view', express.static(storage.filesRoot, {maxAge: '1year'}))
+  router.use('/view', express.static(storage.filesRoot, {maxAge: photoMaxAge}))
+
+  router.get('/view/:userId/:photoId/:width/:height', function (req, res) {
+    var userId = req.params.userId
+    var photoId = req.params.photoId
+    var width = req.params.width
+    var height = req.params.height
+
+    if (!validate.resizedPhotoWidth(width)) {
+      inputError(res, 'Invalid width')
+      return
+    }
+
+    if (!validate.resizedPhotoHeight(height)) {
+      inputError(res, 'Invalid height')
+      return
+    }
+
+    storage.getPhoto(userId, photoId)
+      .then(photoInfo => {
+        var original = storage.photoOriginalPath(photoInfo)
+        var resized = path.join(
+          tmpdir, photoInfo.id + '.' + width + 'x' + height + '.jpg')
+
+        return new Promise((resolve, reject) => {
+          gm(original)
+            .resize(width, height, '>')
+            .write(
+              resized,
+              error => error
+                ? reject(error)
+                : resolve(resized)
+            )
+        })
+      })
+      .then(resized => res.sendFile(resized, {maxAge: photoMaxAge}))
+      .catch(error => {
+        if (error instanceof errors.NotFoundError) {
+          res.status(404).send('Not Found')
+        } else {
+          throw error
+        }
+      })
+      .catch(internalErrorHandler(res))
+  })
 
   return router
 }
 
 function viewPhotoPath (photoInfo) {
-  return '/view/' + photoInfo.userId + '/' + photoInfo.id + '.jpg'
+  return '/view/' + photoInfo.userId + '/' + photoInfo.id + '/2000/2000'
 }
 
 function internalErrorHandler (res) {

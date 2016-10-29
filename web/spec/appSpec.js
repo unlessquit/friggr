@@ -83,7 +83,7 @@ describe('app', function () {
         .get('/view/' + userId + '/latest.jpg')
         .expect(302)
         .expect('Found. Redirecting to /view/' + userId +
-                '/' + latestPhotoId + '.jpg')
+                '/' + latestPhotoId + '/2000/2000')
         .catch(fail)
         .then(done)
     })
