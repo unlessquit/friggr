@@ -12,6 +12,7 @@ services:
       - ./web:/app
     environment:
       - PGHOST=database
+      - FRIGGR_PORT=3000
     command: "make delayed-start"
 
   web-data:

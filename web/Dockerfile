@@ -1,5 +1,6 @@
 FROM node:6
-EXPOSE 3000
+
+ENV FRIGGR_PORT 80
 
 RUN mkdir -p /data
 RUN mkdir -p /app
