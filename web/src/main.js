@@ -54,6 +54,8 @@ exports.build = function (storage) {
   router.get('/view/:userId/latest.jpg', function (req, res) {
     var userId = req.params.userId
 
+    res.header('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0')
+
     storage.getLatestPhoto(userId)
       .then(photoInfo => res.redirect(viewPhotoPath(photoInfo)))
       .catch(error => {
