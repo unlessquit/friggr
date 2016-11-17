@@ -1,0 +1,187 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <script src="https://unpkg.com/react@15/dist/react.min.js"></script>
+    <script src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
+    <script src="https://unpkg.com/react-router@3.0.0/umd/ReactRouter.min.js"></script>
+    <script src="https://unpkg.com/whatwg-fetch@1.1.1/fetch.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/javascript">
+      var Router = React.createFactory(ReactRouter.Router);
+      var Route = React.createFactory(ReactRouter.Route);
+      var IndexRoute = React.createFactory(ReactRouter.IndexRoute);
+      var Link = React.createFactory(ReactRouter.Link);
+    </script>
+
+    <script type="text/javascript">
+      // DOM helpers (we don't have JSX)
+      function h(component, properties, children) {
+        // Make properties argument optional
+        if (!children && Array.isArray(properties)) {
+          children = properties;
+          properties = {}
+        }
+
+        var args = [component, properties].concat(children)
+        return React.createElement.apply(null, args)
+      }
+
+      h.div = h.bind(null, 'div')
+      h.h1 = h.bind(null, 'h1')
+      h.h2 = h.bind(null, 'h2')
+      h.h3 = h.bind(null, 'h3')
+      h.span = h.bind(null, 'span')
+    </script>
+
+    <script type="text/javascript">
+      // Clojure-like fns
+      function assoc(obj, key, value) {
+        return Object.assign({}, obj, {[key]: value})
+      }
+
+      function update(obj, key, fn) {
+        return Object.assign({}, obj, {[key]: fn(obj[key])})
+      }
+    </script>
+
+    <script type="text/javascript">
+      // Redux-like store
+      var appState = {
+        timeElapsed: 0
+      }
+
+      var actions = {
+        INC_ELAPSED: 'incElapsed',
+        NAVIGATION: (name) => 'navigation/' + name,
+        GOT_STATUS: 'gotStatus',
+
+        incElapsed: () => {
+          return { type: actions.INC_ELAPSED }
+        },
+
+        navigation: (name, nextState) => {
+          return {
+            type: actions.NAVIGATION(name)
+          }
+        },
+
+        gotStatus: (status) => {
+          return {
+            type: actions.GOT_STATUS,
+            status: status
+          }
+        },
+      }
+
+      function reducer(state, action) {
+        console.log(JSON.stringify(action))
+
+        switch (action.type) {
+          case actions.INC_ELAPSED:
+            return update(state, 'timeElapsed', n => n + 1)
+
+          case actions.GOT_STATUS:
+            return assoc(state, 'status', action.status)
+        }
+
+        return state
+      }
+
+      function listener(state, action) {
+        switch (action.type) {
+          case actions.NAVIGATION('status'):
+            fetch('/status.json')
+              .then(response => response.json())
+              .then(status => dispatch(actions.gotStatus(status)))
+            break;
+        }
+      }
+
+      function dispatch(action) {
+        appState = reducer(appState, action)
+
+        listener(appState, action)
+      }
+    </script>
+
+    <script type="text/javascript">
+      // Components
+      function Seconds(props) {
+        return h.span(
+          {style: {color: 'green'}},
+          [props.value, 's'])
+      }
+
+      function Main(state) {
+        return h.div(
+          ['Time elapsed: ',
+           h(Seconds, {value: state.timeElapsed}), ' '])
+      }
+
+      function ServerStatus(props) {
+        if (!props.status) {
+          return h.div(["Loading..."])
+        }
+
+        return h.div([props.status.message])
+      }
+
+      function NavigationLinks() {
+        return h.div(
+          [Link({to: '/'}, "Home"),
+           " / ",
+           Link({to: '/status'}, "Status")])
+      }
+
+      function Index(props) {
+        return h.div(
+          {className: 'container'},
+          [h.h1(null, "Friggr"),
+           h(NavigationLinks),
+           props.children])
+      }
+
+      function handleNavigation(name) {
+        return function (nextState) {
+          dispatch(actions.navigation(name, nextState))
+        }
+      }
+
+      function withAppState(component) {
+        var factory = React.createFactory(component)
+
+        return function (props) {
+          return factory(Object.assign({}, props, appState))
+        }
+      }
+
+      var routes = [
+        Route({path: "/",
+               component: withAppState(Index)},
+              IndexRoute({path: '/',
+                          component: withAppState(Main)}),
+              Route({path: '/status',
+                     component: withAppState(ServerStatus),
+                     onEnter: handleNavigation('status')}))]
+
+      var root = document.getElementById('root')
+      var prevAppState;
+
+      (function loop() {
+        if (prevAppState !== appState) {
+          prevAppState = appState
+          ReactDOM.render(
+            Router({history: ReactRouter.hashHistory}, routes),
+            root)
+        }
+
+        requestAnimationFrame(loop)
+      })()
+
+      setInterval(() => dispatch(actions.incElapsed()) , 1000)
+    </script>
+  </body>
+</html>

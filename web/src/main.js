@@ -14,16 +14,20 @@ var tmpdir = '/tmp'
 var upload = multer({dest: tmpdir, fileFilter: jpegOnly})
 var photoMaxAge = '1year'
 
+var wwwRoot = path.join(__dirname, '..', 'resources', 'public')
+
 exports.build = function (storage) {
   var router = express.Router()
-  router.get('/', function (req, res) {
+
+  router.get('/status.json', function (req, res) {
     db.query('SELECT $1::text as name', ['World'])
       .then((result) => {
-        res.send('Hello ' + result.rows[0].name + '!')
+        res.setHeader('Content-Type', 'application/json')
+        res.send(JSON.stringify({
+          message: 'Hello ' + result.rows[0].name + '!'
+        }))
       })
-      .catch((error) => {
-        res.send(error.message)
-      })
+      .catch(internalErrorHandler(res))
   })
 
   router.post('/inbox', upload.single('photoFile'), function (req, res) {
@@ -113,6 +117,8 @@ exports.build = function (storage) {
       })
       .catch(internalErrorHandler(res))
   })
+
+  router.use('/', express.static(wwwRoot))
 
   return router
 }
