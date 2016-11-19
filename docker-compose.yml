@@ -5,15 +5,15 @@ services:
       - database
     build: web
     ports:
-      - "3000:3000"
+      - "3000:3000" # webpack dev server
+      - "3001:3001" # api/backend
     volumes_from:
       - web-data
     volumes:
       - ./web:/app
     environment:
       - PGHOST=database
-      - FRIGGR_PORT=3000
-    command: "make delayed-start"
+    command: "make delayed-start-dev"
 
   web-data:
     restart: always

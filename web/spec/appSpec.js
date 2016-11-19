@@ -20,9 +20,9 @@ describe('app', function () {
       Promise.resolve({rows: [{name: 'World'}]}))
 
     agent
-      .get('/')
+      .get('/status.json')
       .expect(200)
-      .expect('Hello World!')
+      .expect({message: 'Hello World!'})
       .catch(fail)
       .then(done)
   })

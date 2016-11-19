@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "./startup.sh",
+    "dev": "nf start -p 3000 --procfile Procfile.dev",
     "pretest": "standard",
     "test": "jasmine"
   },
@@ -18,20 +19,27 @@
     "url": "https://github.com/unlessquit/friggr/issues"
   },
   "homepage": "https://github.com/unlessquit/friggr",
+  "standard": {
+    "ignore": [
+      "client/node_modules/",
+      "client/build/"
+    ]
+  },
   "dependencies": {
     "express": "^4.14.0",
+    "foreman": "^2.0.0",
     "gm": "^1.23.0",
     "multer": "^1.2.0",
     "mv": "^2.1.1",
     "node-pg-migrate": "0.0.10",
     "pg": "^6.1.0",
-    "uuid": "^2.0.3",
-    "validator": "^6.1.0"
+    "uuid": "^3.0.1",
+    "validator": "^6.2.0"
   },
   "devDependencies": {
     "jasmine": "^2.5.2",
     "nodemon": "^1.11.0",
-    "standard": "^8.5.0",
+    "standard": "^8.6.0",
     "supertest": "^2.0.1",
     "supertest-as-promised": "^4.0.1"
   }
