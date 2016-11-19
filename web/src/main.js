@@ -13,17 +13,20 @@ function jpegOnly (req, file, cb) {
 var tmpdir = '/tmp'
 var upload = multer({dest: tmpdir, fileFilter: jpegOnly})
 var photoMaxAge = '1year'
+var clientRoot = path.join(__dirname, '..', 'client', 'build')
 
 exports.build = function (storage) {
   var router = express.Router()
-  router.get('/', function (req, res) {
+
+  router.get('/status.json', function (req, res) {
     db.query('SELECT $1::text as name', ['World'])
       .then((result) => {
-        res.send('Hello ' + result.rows[0].name + '!')
+        res.setHeader('Content-Type', 'application/json')
+        res.send(JSON.stringify({
+          message: 'Hello ' + result.rows[0].name + '!'
+        }))
       })
-      .catch((error) => {
-        res.send(error.message)
-      })
+      .catch(internalErrorHandler(res))
   })
 
   router.post('/inbox', upload.single('photoFile'), function (req, res) {
@@ -40,7 +43,7 @@ exports.build = function (storage) {
     }
 
     storage.addPhotoFile(userId, req.file.path)
-      .then(photoInfo => res.redirect(viewPhotoPath(photoInfo)))
+      .then(photoInfo => res.redirect(viewUserPath(userId)))
       .catch(error => {
         if (error instanceof errors.AccessDeniedError) {
           res.status(403).send('Forbidden')
@@ -114,7 +117,17 @@ exports.build = function (storage) {
       .catch(internalErrorHandler(res))
   })
 
+  // Serve client on all other URLs
+  router.use('/', express.static(clientRoot))
+  router.get('*', function (req, res) {
+    res.sendFile(path.join(clientRoot, 'index.html'))
+  })
+
   return router
+}
+
+function viewUserPath (userId) {
+  return '/view/' + userId
 }
 
 function viewPhotoPath (photoInfo) {
