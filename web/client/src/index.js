@@ -1,7 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { createStore } from 'redux'
+import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
+import createLogger from 'redux-logger'
 import { Router, Route, IndexRoute, browserHistory } from 'react-router'
 import Cookies from 'js-cookie'
 
@@ -12,7 +13,15 @@ import Status from './containers/Status'
 import { gotStatus, lastUserIdCookieLoaded } from './actions'
 import reducer from './reducers'
 
-const store = createStore(reducer)
+var inDevMode = process.env.NODE_ENV === 'development'
+
+function maybeApplyMiddleware (...maybeMiddlewares) {
+  // Remove null middlewares
+  return applyMiddleware.apply(null, maybeMiddlewares.filter(m => !!m))
+}
+
+const logger = createLogger()
+const store = createStore(reducer, maybeApplyMiddleware(inDevMode && logger))
 
 let visitStatus = () => {
   window.fetch('/status.json')
