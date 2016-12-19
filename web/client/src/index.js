@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import createLogger from 'redux-logger'
+import createSagaMiddleware from 'redux-saga'
 import { Router, Route, IndexRoute, browserHistory } from 'react-router'
 import Cookies from 'js-cookie'
 
@@ -12,6 +13,7 @@ import Inbox from './containers/Inbox'
 import Status from './containers/Status'
 import { gotStatus, lastUserIdCookieLoaded } from './actions'
 import reducer from './reducers'
+import saga from './sagas'
 
 var inDevMode = process.env.NODE_ENV === 'development'
 
@@ -21,7 +23,15 @@ function maybeApplyMiddleware (...maybeMiddlewares) {
 }
 
 const logger = createLogger()
-const store = createStore(reducer, maybeApplyMiddleware(inDevMode && logger))
+const sagaMiddleware = createSagaMiddleware()
+const store = createStore(
+  reducer,
+  maybeApplyMiddleware(
+    sagaMiddleware,
+    inDevMode && logger
+  )
+)
+sagaMiddleware.run(saga)
 
 let visitStatus = () => {
   window.fetch('/status.json')

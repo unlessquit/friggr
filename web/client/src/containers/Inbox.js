@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import Cookies from 'js-cookie'
 
 import { uploadingPhoto } from '../actions'
 
@@ -17,9 +16,7 @@ class Inbox extends Component {
       userId: event.target.value
     })
     this.onSubmit = () => {
-      const userId = this.state.userId
-      Cookies.set('lastUserId', userId) // Move to redux-saga
-      dispatch(uploadingPhoto(userId))
+      dispatch(uploadingPhoto(this.state.userId))
     }
   }
 
