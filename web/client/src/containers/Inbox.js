@@ -13,7 +13,9 @@ function mapStateToProps (state) {
 class Inbox extends Component {
   constructor ({dispatch}) {
     super()
-    this.onUserIdChange = (event) => this.setState('userId', event.target.value)
+    this.onUserIdChange = (event) => this.setState({
+      userId: event.target.value
+    })
     this.onSubmit = () => {
       const userId = this.state.userId
       Cookies.set('lastUserId', userId) // Move to redux-saga
