@@ -22,7 +22,7 @@ function maybeApplyMiddleware (...maybeMiddlewares) {
   return applyMiddleware.apply(null, maybeMiddlewares.filter(m => !!m))
 }
 
-const logger = createLogger()
+const logger = createLogger({ diff: true })
 const sagaMiddleware = createSagaMiddleware()
 const store = createStore(
   reducer,
