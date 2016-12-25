@@ -1,3 +1,11 @@
+export const navigation = (name, params) => {
+  return {
+    type: 'NAVIGATION',
+    name: name,
+    params: params
+  }
+}
+
 export const uploadingPhoto = (userId) => {
   return {
     type: 'UPLOADING_PHOTO',

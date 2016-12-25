@@ -11,7 +11,7 @@ import App from './App'
 import View from './components/View'
 import Inbox from './containers/Inbox'
 import Status from './containers/Status'
-import { gotStatus, lastUserIdCookieLoaded } from './actions'
+import { lastUserIdCookieLoaded, navigation } from './actions'
 import reducer from './reducers'
 import saga from './sagas'
 
@@ -33,19 +33,17 @@ const store = createStore(
 )
 sagaMiddleware.run(saga)
 
-let visitStatus = () => {
-  window.fetch('/status.json')
-    .then(res => res.json())
-    .then(data => store.dispatch(gotStatus(data)))
+let onNavigate = name => ({params}) => {
+  store.dispatch(navigation(name, params))
 }
 
 ReactDOM.render(
   <Provider store={store}>
     <Router history={browserHistory}>
       <Route path='/' component={App}>
-        <IndexRoute component={Status} onEnter={visitStatus} />
+        <IndexRoute component={Status} onEnter={onNavigate('home')} />
         <Route path='inbox' component={Inbox} />
-        <Route path='view/:userId' component={View} />
+        <Route path='view/:userId' component={View} onEnter={onNavigate('view')} />
       </Route>
     </Router>
   </Provider>,

@@ -11,9 +11,11 @@ function mapStateToProps (state) {
 const Navigation = ({lastUserId}) => {
   const viewUrl = '/view/' + encodeURIComponent(lastUserId)
 
+  var view = lastUserId ? <span>/ <Link to={viewUrl}>View</Link></span> : ''
+
   return (
     <p>
-      <Link to='/'>Home</Link> / <Link to='/inbox'>Inbox</Link> / <Link to={viewUrl}>View</Link>
+      <Link to='/'>Home</Link> / <Link to='/inbox'>Inbox</Link> {view}
     </p>
   )
 }
