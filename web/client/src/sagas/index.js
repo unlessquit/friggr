@@ -4,7 +4,7 @@ import { gotStatus } from '../actions'
 import Cookies from 'js-cookie'
 
 function storeLastUserId ({userId}) {
-  Cookies.set('lastUserId', userId)
+  Cookies.set('lastUserId', userId, { expires: 365 })
 }
 
 function* navigation (action) {
