@@ -6,14 +6,11 @@ import Navigation from './containers/Navigation'
 
 export default ({children}) => {
   return (
-    <div>
-      <Grid>
-        <h1>Welcome to Friggr</h1>
-        <Navigation />
-        <div>
-          {children}
-        </div>
-      </Grid>
-    </div>
+    <Grid>
+      <Navigation />
+      <div>
+        {children}
+      </div>
+    </Grid>
   )
 }
