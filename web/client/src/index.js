@@ -9,8 +9,8 @@ import Cookies from 'js-cookie'
 
 import App from './App'
 import View from './components/View'
-import Inbox from './containers/Inbox'
-import Status from './containers/Status'
+import HomePage from './HomePage'
+import InboxPage from './InboxPage'
 import { lastUserIdCookieLoaded, navigation } from './actions'
 import reducer from './reducers'
 import saga from './sagas'
@@ -41,8 +41,8 @@ ReactDOM.render(
   <Provider store={store}>
     <Router history={browserHistory}>
       <Route path='/' component={App}>
-        <IndexRoute component={Status} onEnter={onNavigate('home')} />
-        <Route path='inbox' component={Inbox} />
+        <IndexRoute component={HomePage} onEnter={onNavigate('home')} />
+        <Route path='inbox' component={InboxPage} />
         <Route path='view/:userId' component={View} onEnter={onNavigate('view')} />
       </Route>
     </Router>
