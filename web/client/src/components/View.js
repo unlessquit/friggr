@@ -4,6 +4,8 @@ export default ({params: {userId}}) => {
   var url = '/view/' + encodeURIComponent(userId) + '/latest.jpg'
 
   return (
-    <img role='presentation' src={url} width='600' />
+    <div className='view-page'>
+      <img role='presentation' src={url} width='100%' />
+    </div>
   )
 }
