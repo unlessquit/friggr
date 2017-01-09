@@ -10,14 +10,30 @@ function mapStateToProps (state) {
 }
 
 class Inbox extends Component {
-  constructor ({dispatch}) {
+  constructor ({dispatch, lastUserId}) {
     super()
+    this.state = {
+      userId: lastUserId
+    }
+
     this.onUserIdChange = (event) => this.setState({
       userId: event.target.value
     })
+
     this.onSubmit = () => {
       dispatch(uploadingPhoto(this.state.userId))
     }
+  }
+
+  componentWillReceiveProps (nextProps) {
+    if (this.props.lastUserId) return
+
+    if (nextProps.lastUserId && !this.state.userId) {
+      this.setState({userId: nextProps.lastUserId})
+      return
+    }
+
+    return
   }
 
   render () {
@@ -26,7 +42,7 @@ class Inbox extends Component {
         onSubmit={this.onSubmit}>
         <label htmlFor='userId'>User</label>
         <input type='text' id='userId' name='userId'
-          defaultValue={this.props.lastUserId}
+          value={this.state.userId}
           onChange={this.onUserIdChange} />
         <br />
         <label htmlFor='photoFile'>Photo</label>
