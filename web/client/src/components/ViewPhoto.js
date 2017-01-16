@@ -1,7 +1,7 @@
 import React from 'react'
 
-export default ({photos}) => {
-  var {userId, id} = photos[0]
+export default ({photo}) => {
+  var {userId, id} = photo
   var url = '/view/' + encodeURIComponent(userId) + '/' + id + '.jpg'
 
   return (

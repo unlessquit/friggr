@@ -41,3 +41,11 @@ export const gotViewData = ({photos, userId}) => {
     userId
   }
 }
+
+export const viewNextPhoto = () => {
+  return {type: 'VIEW_NEXT_PHOTO'}
+}
+
+export const viewPreviousPhoto = () => {
+  return {type: 'VIEW_PREVIOUS_PHOTO'}
+}
