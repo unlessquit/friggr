@@ -10,16 +10,16 @@ const reducer = (state = { current: null, userId: null, photos: null }, action) 
     case 'VIEW_NEXT_PHOTO':
       return {
         ...state,
-        current: state.current > 0
-          ? state.current - 1
-          : 0
+        current: state.current === 0
+          ? state.photos.length - 1
+          : state.current - 1
       }
     case 'VIEW_PREVIOUS_PHOTO':
       return {
         ...state,
-        current: state.current < state.photos.length - 1
-          ? state.current + 1
-          : state.current
+        current: state.current === state.photos.length - 1
+          ? 0
+          : state.current + 1
       }
     case 'NAVIGATION_VIEW':
       if (action.userId !== state.userId) {
