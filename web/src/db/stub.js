@@ -9,12 +9,12 @@ class DbStub {
 
   getLatestPhoto (userId) {
     return Promise.resolve(
-      this.photos.find(photo => photo.userId === userId)
+      this.photos.find(photo => photo.user_id === userId)
     )
   }
 
   insertPhoto (photoId, userId) {
-    this.photos.unshift({ id: photoId, userId: userId })
+    this.photos.unshift({ id: photoId, user_id: userId })
     return Promise.resolve({})
   }
 }
