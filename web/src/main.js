@@ -54,6 +54,21 @@ exports.build = function (storage) {
       .catch(internalErrorHandler(res))
   })
 
+  router.get('/view/:userId/data.json', function (req, res) {
+    var userId = req.params.userId
+    if (!validate.userId(userId)) {
+      inputError(res, 'Invalid userId')
+      return
+    }
+
+    storage.getAllPhotos(userId)
+      .then(result => {
+        res.setHeader('Content-Type', 'application/json')
+        res.send(JSON.stringify({photos: result}))
+      })
+      .catch(internalErrorHandler(res))
+  })
+
   router.get('/view/:userId/latest.jpg', function (req, res) {
     var userId = req.params.userId
 

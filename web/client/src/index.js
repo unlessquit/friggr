@@ -8,10 +8,10 @@ import { Router, Route, IndexRoute, browserHistory } from 'react-router'
 import Cookies from 'js-cookie'
 
 import App from './App'
-import View from './components/View'
+import View from './containers/View'
 import HomePage from './HomePage'
 import InboxPage from './InboxPage'
-import { lastUserIdCookieLoaded, navigation } from './actions'
+import { lastUserIdCookieLoaded, navigation, navigationView } from './actions'
 import reducer from './reducers'
 import saga from './sagas'
 
@@ -34,7 +34,13 @@ const store = createStore(
 sagaMiddleware.run(saga)
 
 let onNavigate = name => ({params}) => {
-  store.dispatch(navigation(name, params))
+  switch (name) {
+    case 'view':
+      store.dispatch(navigationView(params.userId))
+      break
+    default:
+      store.dispatch(navigation(name, params))
+  }
 }
 
 ReactDOM.render(

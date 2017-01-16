@@ -40,6 +40,15 @@ class Storage {
       })
   }
 
+  getAllPhotos (userId) {
+    return this.db.getAllPhotos(userId)
+      .then(photoRows => {
+        return photoRows.map(
+          photoRow => new PhotoInfo(photoRow.id, photoRow.user_id)
+        )
+      })
+  }
+
   addPhotoFile (userId, photoPath) {
     var photoId = uuid.v4()
 

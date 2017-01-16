@@ -6,6 +6,13 @@ export const navigation = (name, params) => {
   }
 }
 
+export const navigationView = (userId) => {
+  return {
+    type: 'NAVIGATION_VIEW',
+    userId: userId
+  }
+}
+
 export const uploadingPhoto = (userId) => {
   return {
     type: 'UPLOADING_PHOTO',
@@ -24,5 +31,13 @@ export const gotStatus = (status) => {
   return {
     type: 'GOT_STATUS',
     status: status
+  }
+}
+
+export const gotViewData = ({photos, userId}) => {
+  return {
+    type: 'GOT_VIEW_DATA',
+    photos,
+    userId
   }
 }

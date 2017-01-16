@@ -15,6 +15,13 @@ exports.getPhoto = function (userId, photoId) {
   ).then(result => result.rows[0])
 }
 
+exports.getAllPhotos = function (userId) {
+  return pool.query(
+    'SELECT id, user_id FROM uphoto WHERE user_id = $1 ORDER BY ts DESC',
+    [userId]
+  ).then(result => result.rows)
+}
+
 exports.getLatestPhoto = function (userId) {
   return pool.query(
     'SELECT id FROM uphoto WHERE user_id = $1 ORDER BY ts DESC LIMIT 1',

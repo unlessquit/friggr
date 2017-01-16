@@ -13,6 +13,12 @@ class DbStub {
     )
   }
 
+  getAllPhotos (userId) {
+    return Promise.resolve(
+      this.photos.filter(photo => photo.user_id === userId)
+    )
+  }
+
   insertPhoto (photoId, userId) {
     this.photos.unshift({ id: photoId, user_id: userId })
     return Promise.resolve({})

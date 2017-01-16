@@ -1,4 +1,4 @@
-/* global spyOn, describe, it, beforeEach, fail */
+/* global spyOn, describe, it, beforeEach, fail, expect */
 var request = require('supertest-as-promised')
 var app = require('../src/app')
 var DbStub = require('../src/db/stub')
@@ -55,6 +55,28 @@ describe('app', function () {
         .attach('photoFile', file('file.txt'))
         .expect(400)
         .expect('Invalid photoFile')
+        .catch(fail)
+        .then(done)
+    })
+  })
+
+  describe('/view/:userId/data.json', function () {
+    it('provides list of user\'s photos', function (done) {
+      var userId = 'user'
+      var previousPhotoId = 'previous-id'
+      var latestPhotoId = 'latest-id'
+
+      db.insertPhoto(previousPhotoId, userId)
+      db.insertPhoto(latestPhotoId, userId)
+
+      agent
+        .get('/view/' + userId + '/data.json')
+        .expect(200)
+        .expect(res => {
+          expect(res.body.photos.length).toBe(2)
+          expect(res.body.photos[0].id).toBe(latestPhotoId)
+          expect(res.body.photos[1].id).toBe(previousPhotoId)
+        })
         .catch(fail)
         .then(done)
     })
