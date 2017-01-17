@@ -6,7 +6,7 @@ export default ({photo}) => {
 
   return (
     <div className='view-page'>
-      <img role='presentation' src={url} width='100%' />
+      <img className='photo' role='presentation' src={url} />
     </div>
   )
 }
