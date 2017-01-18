@@ -4,7 +4,7 @@
   "private": true,
   "proxy": "http://web:3001/",
   "devDependencies": {
-    "react-scripts": "0.7.0"
+    "react-scripts": "0.8.5"
   },
   "dependencies": {
     "bootstrap": "^3.3.7",
