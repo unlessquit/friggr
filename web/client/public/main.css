@@ -10,7 +10,16 @@ html, body, #root {
   text-align: center;
 }
 
+.view-page:before {
+    content: ' ';
+    display: inline-block;
+    vertical-align: middle;
+    height: 100%;
+}
+
 .photo {
+  display: inline-block;
+  vertical-align: middle;
   zoom: 4;
   max-width: 100%;
   max-height: 100%;
