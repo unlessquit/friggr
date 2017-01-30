@@ -3,9 +3,10 @@ var uuid = require('uuid')
 var errors = require('./errors')
 
 class PhotoInfo {
-  constructor (id, userId) {
+  constructor (id, userId, caption) {
     this.id = id
     this.userId = userId
+    this.caption = caption
   }
 }
 
@@ -25,7 +26,7 @@ class Storage {
           throw new errors.NotFoundError()
         }
 
-        return new PhotoInfo(photoRow.id, userId)
+        return new PhotoInfo(photoRow.id, userId, photoRow.caption)
       })
   }
 
@@ -36,7 +37,7 @@ class Storage {
           throw new errors.NotFoundError()
         }
 
-        return new PhotoInfo(photoRow.id, photoRow.user_id)
+        return new PhotoInfo(photoRow.id, photoRow.user_id, photoRow.caption)
       })
   }
 
@@ -44,12 +45,12 @@ class Storage {
     return this.db.getAllPhotos(userId)
       .then(photoRows => {
         return photoRows.map(
-          photoRow => new PhotoInfo(photoRow.id, photoRow.user_id)
+          photoRow => new PhotoInfo(photoRow.id, photoRow.user_id, photoRow.caption)
         )
       })
   }
 
-  addPhotoFile (userId, photoPath) {
+  addPhotoFile (userId, photoPath, caption) {
     var photoId = uuid.v4()
 
     var storedPath = this.filesRoot + '/' + userId + '/' + photoId + '.jpg'
@@ -62,8 +63,8 @@ class Storage {
             return
           }
 
-          this.db.insertPhoto(photoId, userId)
-            .then(_ => resolve(new PhotoInfo(photoId, userId)))
+          this.db.insertPhoto(photoId, userId, caption)
+            .then(_ => resolve(new PhotoInfo(photoId, userId, caption)))
             .catch(error => reject(new Error(error)))
         })
       }

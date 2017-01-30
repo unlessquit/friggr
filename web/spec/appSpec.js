@@ -65,16 +65,20 @@ describe('app', function () {
       var userId = 'user'
       var previousPhotoId = 'previous-id'
       var latestPhotoId = 'latest-id'
+      var latestPhotoCaption = 'latest-caption'
 
       db.insertPhoto(previousPhotoId, userId)
-      db.insertPhoto(latestPhotoId, userId)
+      db.insertPhoto(latestPhotoId, userId, latestPhotoCaption)
 
       agent
         .get('/view/' + userId + '/data.json')
         .expect(200)
         .expect(res => {
           expect(res.body.photos.length).toBe(2)
+
           expect(res.body.photos[0].id).toBe(latestPhotoId)
+          expect(res.body.photos[0].caption).toBe(latestPhotoCaption)
+
           expect(res.body.photos[1].id).toBe(previousPhotoId)
         })
         .catch(fail)

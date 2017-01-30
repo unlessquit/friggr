@@ -42,7 +42,7 @@ exports.build = function (storage) {
       return
     }
 
-    storage.addPhotoFile(userId, req.file.path)
+    storage.addPhotoFile(userId, req.file.path, req.body.caption)
       .then(photoInfo => res.redirect(viewUserPath(userId)))
       .catch(error => {
         if (error instanceof errors.AccessDeniedError) {

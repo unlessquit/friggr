@@ -1,5 +1,11 @@
 import React from 'react'
 
+function Caption (caption) {
+  if (!caption) return ''
+
+  return <div className='caption'><span>{caption}</span></div>
+}
+
 export default ({photo}) => {
   var url = viewPhotoPath(photo)
 
@@ -9,6 +15,7 @@ export default ({photo}) => {
   return (
     <div className='view-page'>
       <img key={photo.id} className='photo' role='presentation' src={url} />
+      {Caption(photo.caption)}
     </div>
   )
 }

@@ -26,3 +26,17 @@ html, body, #root {
   height: auto;
   width: auto;
 }
+
+.caption {
+  position: fixed;
+  bottom: 20px;
+  left: 0px;
+  width: 100%;
+  color: white;
+}
+
+.caption span {
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 7px;
+  border-radius: 3px;
+}

@@ -13,11 +13,16 @@ class Inbox extends Component {
   constructor ({dispatch, lastUserId}) {
     super()
     this.state = {
-      userId: lastUserId
+      userId: lastUserId,
+      caption: ''
     }
 
     this.onUserIdChange = (event) => this.setState({
       userId: event.target.value
+    })
+
+    this.onCaptionChange = (event) => this.setState({
+      caption: event.target.value
     })
 
     this.onSubmit = () => {
@@ -44,6 +49,11 @@ class Inbox extends Component {
         <input type='text' id='userId' name='userId'
           value={this.state.userId}
           onChange={this.onUserIdChange} />
+        <br />
+        <label htmlFor='caption'>Caption</label>
+        <input type='text' id='caption' name='caption'
+          value={this.state.caption}
+          onChange={this.onCaptionChange} />
         <br />
         <label htmlFor='photoFile'>Photo</label>
         <input type='file' id='photo' name='photoFile' />
