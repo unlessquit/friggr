@@ -19,8 +19,8 @@ class DbStub {
     )
   }
 
-  insertPhoto (photoId, userId) {
-    this.photos.unshift({ id: photoId, user_id: userId })
+  insertPhoto (photoId, userId, caption) {
+    this.photos.unshift({ id: photoId, user_id: userId, caption: caption })
     return Promise.resolve({})
   }
 }
