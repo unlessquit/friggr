@@ -9,6 +9,8 @@ function Caption (caption) {
 export default class ViewPhoto extends Component {
   constructor ({dispatch}) {
     super()
+    this.state = {isLoading: true}
+    this.onLoad = (event) => { this.setState({isLoading: false}) }
   }
 
   render () {
@@ -20,8 +22,8 @@ export default class ViewPhoto extends Component {
     // been registered).
     return (
       <div className='view-page'>
-        <img key={photo.id} className='photo' role='presentation' src={url} />
-        {Caption(photo.caption)}
+        <img key={photo.id} className='photo' role='presentation' src={url} onLoad={this.onLoad} />
+        {Caption(this.state.isLoading ? 'Loading...' : photo.caption)}
       </div>
     )
   }
