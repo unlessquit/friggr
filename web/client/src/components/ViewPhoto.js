@@ -13,6 +13,12 @@ export default class ViewPhoto extends Component {
     this.onLoad = (event) => { this.setState({isLoading: false}) }
   }
 
+  componentWillReceiveProps (nextProps) {
+    if (this.props.photo.id !== nextProps.photo.id) {
+      this.setState({isLoading: true})
+    }
+  }
+
   render () {
     var photo = this.props.photo
     var url = viewPhotoPath(photo)
