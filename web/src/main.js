@@ -20,12 +20,7 @@ exports.build = function (storage) {
 
   router.get('/status.json', function (req, res) {
     db.query('SELECT $1::text as name', ['World'])
-      .then((result) => {
-        res.setHeader('Content-Type', 'application/json')
-        res.send(JSON.stringify({
-          message: 'Hello ' + result.rows[0].name + '!'
-        }))
-      })
+      .then(result => res.json({message: 'Hello ' + result.rows[0].name + '!'}))
       .catch(internalErrorHandler(res))
   })
 
@@ -62,10 +57,7 @@ exports.build = function (storage) {
     }
 
     storage.getAllPhotos(userId)
-      .then(result => {
-        res.setHeader('Content-Type', 'application/json')
-        res.send(JSON.stringify({photos: result}))
-      })
+      .then(result => res.json({photos: result}))
       .catch(internalErrorHandler(res))
   })
 
