@@ -13,6 +13,7 @@ services:
       - ./web:/app
     environment:
       - PGHOST=database
+      - FRIGGR_HTTP_LOG_FORMAT=short
     command: "make delayed-start-dev"
 
   web-data:
