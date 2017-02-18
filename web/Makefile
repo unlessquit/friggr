@@ -17,7 +17,7 @@ push-image: build-image
 	docker push unlessquit/friggr-web
 
 node_modules: package.json
-	yarn install
+	npm install
 
 build-client:
 	$(MAKE) -C client build
