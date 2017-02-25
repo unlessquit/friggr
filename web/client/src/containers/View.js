@@ -16,6 +16,7 @@ class ViewContainer extends Component {
   constructor () {
     super()
     this.handleKeyDown = this.handleKeyDown.bind(this)
+    this.handleSwipe = this.handleSwipe.bind(this)
   }
 
   componentWillMount () {
@@ -24,6 +25,21 @@ class ViewContainer extends Component {
 
   componentWillUnmount () {
     window.removeEventListener('keydown', this.handleKeyDown)
+  }
+
+  handleSwipe (direction) {
+    var {dispatch} = this.props
+
+    switch (direction) {
+      case 'right':
+        dispatch(viewPreviousPhoto())
+        break
+      case 'left':
+        dispatch(viewNextPhoto())
+        break
+      default:
+        break
+    }
   }
 
   handleKeyDown (event) {
@@ -45,7 +61,7 @@ class ViewContainer extends Component {
     var {photos, current} = this.props
 
     if (photos && photos.length > 0) {
-      return <ViewPhoto photo={photos[current]} />
+      return <ViewPhoto photo={photos[current]} onSwipe={this.handleSwipe} />
     }
     var message = photos ? 'No photos' : 'Loading...'
 
