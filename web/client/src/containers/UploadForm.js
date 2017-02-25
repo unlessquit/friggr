@@ -56,7 +56,7 @@ class Inbox extends Component {
           onChange={this.onCaptionChange} />
         <br />
         <label htmlFor='photoFile'>Photo</label>
-        <input type='file' id='photo' name='photoFile' />
+        <input type='file' id='photo' name='photoFile' accept='image/jpeg' />
         <br />
         <input type='submit' value='Upload' />
       </form>
